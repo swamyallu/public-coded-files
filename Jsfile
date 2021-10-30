@@ -1,0 +1,31 @@
+pipeline{
+    agent any
+    stages{
+        stage("SCM Checkout"){
+            steps{
+                git branch: 'dev', url: 'https://github.com/swamyallu/public-coded-files'
+            }
+        }
+        stage('Maven Build'){
+            steps{
+                sh 'mvn clean package'
+                sh 'mv target/myweb-0.0.4.war target/tomcat.war'
+            }
+        }
+        stage('Deployment'){    
+            steps{
+                sshagent(['Tomcat-1']) {
+                    sh "scp -o StrictHostKeyChecking=no target/tomcat*.war ec2-user@172.31.12.15:/opt/tomcat/webapps/"
+                    sh "ssh ec2-user@172.31.12.15 /opt/tomcat/bin/shutdown.sh"
+                    sh "ssh ec2-user@172.31.12.15 /opt/tomcat/bin/startup.sh"
+                }
+            }
+        }
+        
+    }
+    post {
+        always {
+            cleanWs()
+        }
+    }
+}
