@@ -1,8 +1,12 @@
 pipeline{
     agent any
     stages{
-       
-        stag('Maven Build'){
+        stage('Maven Build'){
+            steps{
+                git branch: 'dev', url: 'https://github.com/swamyallu/public-coded-files'
+            }
+        }
+        stage('Maven Build'){
             steps{
                 sh 'mvn clean package'
                 sh 'mv target/myweb-0.0.4.war target/tomcat.war'
