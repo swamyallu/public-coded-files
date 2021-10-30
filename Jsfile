@@ -2,7 +2,7 @@ pipeline{
     agent any
     stages{
        
-        stage('Maven Build'){
+        stag('Maven Build'){
             steps{
                 sh 'mvn clean package'
                 sh 'mv target/myweb-0.0.4.war target/tomcat.war'
