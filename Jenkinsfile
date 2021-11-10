@@ -15,6 +15,11 @@ pipeline{
                tomcatDeploy("172.31.46.32","tomcat-dev","myweb")
             }
         }
+        stage("print"){
+            steps{
+                echo "This is Multi-branch pipeline"
+            }
+        }    
     }
     post {
       always {
